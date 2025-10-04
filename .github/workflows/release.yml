@@ -28,12 +28,14 @@ jobs:
     - name: Build
       env:
         GOOS: ${{ matrix.goos }}
-        GOARCH: ${{ matrix.arch }}
+        GOARCH: ${{ matrix.goarch }}
       run: |
+        LDFLAGS_STATIC="-s -w -extldflags=-static"
+        
         if [ $GOOS = "windows" ]; then
-          CGO_ENABLED=0 go build -v -ldflags="-s -w" -o expensetracker.exe .
+          go build -v -ldflags="$LDFLAGS_STATIC" -o expensetracker.exe .
         else
-          CGO_ENABLED=0 go build -v -ldflags="-s -w" -o expensetracker .
+          go build -v -ldflags="$LDFLAGS_STATIC" -o expensetracker .
         fi
 
     - name: Upload Release Asset

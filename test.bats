@@ -1,7 +1,6 @@
 #!/usr/bin/env bats
 
 setup() {
-    go build -o expensetracker .
     rm -f .expenses.sqlite3
     export EXPENSE_DB_PATH=".expenses.sqlite3"
 }
