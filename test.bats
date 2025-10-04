@@ -6,6 +6,8 @@ setup() {
     export EXPENSE_DB_PATH=".expenses.sqlite3"
 }
 
+# --- ADD COMMAND TESTS ---
+
 @test "should add an expense successfully" {
     run ./expensetracker add -a 100 -c "Test" -n "Initial item"
     [ "$status" -eq 0 ]
@@ -17,6 +19,8 @@ setup() {
     [ "$status" -ne 0 ]
     [[ "$output" == *"required flag(s) \"amount\" not set"* ]]
 }
+
+# --- LIST COMMAND TESTS ---
 
 @test "should list previously added expenses" {
     run ./expensetracker add -a 50 -n "First Item" -c "Food"
@@ -44,6 +48,8 @@ setup() {
     [[ "$output" == *"No expenses found"* ]]
 }
 
+# --- UPDATE COMMAND TESTS ---
+
 @test "should update an existing expense" {
     run ./expensetracker add -a 100 -c "Old Category"
 
@@ -63,6 +69,8 @@ setup() {
     [ "$status" -ne 0 ]
     [[ "$output" == *"no expense found with ID 99"* ]]
 }
+
+# --- DELETE COMMAND TESTS ---
 
 @test "should soft-delete an expense by ID" {
     run ./expensetracker add -a 100 -n "Item to delete"
@@ -99,4 +107,30 @@ setup() {
     [ "$status" -eq 0 ]
     [[ "$output" != *"Delete"* ]]
     [[ "$output" == *"Keep"* ]]
+}
+
+# --- REPORT COMMAND TESTS ---
+
+@test "should report the grand total of all expenses" {
+    run ./expensetracker add -a 100.50 -c "Food"
+    run ./expensetracker add -a 75 -c "Transport"
+    run ./expensetracker add -a 25.25 -c "Food"
+
+    run ./expensetracker report --total
+    [ "$status" -eq 0 ]
+    [[ "$output" == *"Total Expenses: 200.75"* ]]
+}
+
+@test "should report expenses grouped by category" {
+    run ./expensetracker add -a 100 -c "Food"
+    run ./expensetracker add -a 75 -c "Transport"
+    run ./expensetracker add -a 25 -c "Food"
+    run ./expensetracker add -a 50 -c "Transport"
+
+    run ./expensetracker report --by-category
+    [ "$status" -eq 0 ]
+    grep -q "Food" <<< "$output"
+    grep -q "Transport" <<< "$output"
+    grep -q "125.00" <<< "$output"
+    grep -q "250.00" <<< "$output"
 }

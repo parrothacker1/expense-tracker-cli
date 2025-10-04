@@ -2,7 +2,7 @@
 
 A fast and powerful command-line tool for managing your personal expenses, built with Go.
 
-[![Go Version](https://img.shields.io/badge/go-1.21+-00ADD8.svg)](https://golang.org/)  
+[![Go Version](https://img.shields.io/badge/go-1.25+-00ADD8.svg)](https://golang.org/)  
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  
 [![GitHub Actions CI](https://github.com/parrothacker1/expense-tracker-cli/actions/workflows/release.yml/badge.svg)](https://github.com/parrothacker1/expense-tracker-cli/actions/workflows/release.yml)  
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/parrothacker1/expense-tracker-cli)](https://github.com/parrothacker1/expense-tracker-cli/releases)
@@ -104,15 +104,21 @@ expensetracker delete --category "Temporary" --force
 expensetracker delete 5 --permanent
 ```
 
+### Report on Expenses
+
+```sh
+# Get the grand total of all expenses
+expensetracker report --total
+
+# Get a summary of spending grouped by category
+expensetracker report --by-category
+```
+
 ---
-
-## 🛠️ Development & Testing
-
-Contributions are welcome!
 
 ### Prerequisites
 
-- Go (version 1.21 or newer)  
+- Go (version 1.25.1 or newer)  
 - `bats-core` for running the test suite.  
 
 ### Testing

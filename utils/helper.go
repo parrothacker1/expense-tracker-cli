@@ -115,3 +115,31 @@ func UpdateExpense(expense *models.Expense) error {
 	result := models.DB.Save(expense)
 	return result.Error
 }
+
+func GetTotalExpenses() (float64, error) {
+	var total float64
+	result := models.DB.Model(&models.Expense{}).Select("sum(amount)").Row()
+	if err := result.Scan(&total); err != nil {
+		return 0, err
+	}
+	return total, nil
+}
+
+func GetExpensesByCategory() (map[string]float64, error) {
+	var results []struct {
+		Category string
+		Total    float64
+	}
+	reportMap := make(map[string]float64)
+	err := models.DB.Model(&models.Expense{}).
+		Select("category, sum(amount) as total").
+		Group("category").
+		Scan(&results).Error
+	if err != nil {
+		return nil, err
+	}
+	for _, res := range results {
+		reportMap[res.Category] = res.Total
+	}
+	return reportMap, nil
+}
