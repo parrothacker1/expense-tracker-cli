@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/parrothacker1/expense-tracker/models"
@@ -23,7 +22,7 @@ var addCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		expenseDate, err := time.Parse("2006-01-02", date)
 		if err != nil {
-			fmt.Println("Error parsing date. Please use YYYY-MM-DD format.", err)
+			cmd.Println("Error parsing date. Please use YYYY-MM-DD format.", err)
 			return
 		}
 		expense := models.Expense{
@@ -33,10 +32,10 @@ var addCmd = &cobra.Command{
 			Note:     note,
 		}
 		if err := utils.AddExpense(&expense); err != nil {
-			fmt.Println("Error adding expense:", err)
+			cmd.Println("Error adding expense:", err)
 			return
 		}
-		fmt.Printf("Successfully added expense with ID: %d\n", expense.ID)
+		cmd.Printf("Successfully added expense with ID: %d\n", expense.ID)
 	},
 }
 

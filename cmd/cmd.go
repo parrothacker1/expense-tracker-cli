@@ -13,7 +13,7 @@ var rootCmd = &cobra.Command{
 	Short: "ExpenseTracker is a CLI tool to manage your personal finances.",
 	Long:  `A fast and flexible command-line expense tracker built with Go.`,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-		dbPath := "expenses.db"
+		dbPath := ".expenses.sqlite3"
 		return models.InitDB(dbPath)
 	},
 }
