@@ -28,13 +28,12 @@ jobs:
     - name: Build
       env:
         GOOS: ${{ matrix.goos }}
-        GOARCH: ${{ matrix.goarch }}
+        GOARCH: ${{ matrix.arch }}
       run: |
-        # Add .exe extension for Windows binaries
         if [ $GOOS = "windows" ]; then
-          go build -v -o expensetracker.exe .
+          CGO_ENABLED=0 go build -v -ldflags="-s -w" -o expensetracker.exe .
         else
-          go build -v -o expensetracker .
+          CGO_ENABLED=0 go build -v -ldflags="-s -w" -o expensetracker .
         fi
 
     - name: Upload Release Asset
